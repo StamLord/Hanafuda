@@ -1,0 +1,51 @@
+[gd_scene load_steps=7 format=3 uid="uid://cuk5kc3mjhac5"]
+
+[ext_resource type="Script" path="res://scripts/card_visual.gd" id="2_81oka"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_q477c"]
+load_path = "res://.godot/imported/hanafuda_tex.png-c26dd941c087410284376b7788335a71.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_n5dve"]
+resource_local_to_scene = true
+atlas = SubResource("CompressedTexture2D_q477c")
+region = Rect2(0, 0, 118, 192)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_v763g"]
+draw_center = false
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(1, 1, 0, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_bq4f1"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5dw6s"]
+bg_color = Color(1, 1, 0, 0.501961)
+
+[node name="card_visual" type="TextureRect"]
+scale = Vector2(0.5, 0.5)
+texture = SubResource("AtlasTexture_n5dve")
+stretch_mode = 2
+script = ExtResource("2_81oka")
+
+[node name="highlight" type="Panel" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_v763g")
+
+[node name="button" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_bq4f1")
+theme_override_styles/hover = SubResource("StyleBoxFlat_5dw6s")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_bq4f1")

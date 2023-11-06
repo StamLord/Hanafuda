@@ -1,0 +1,4 @@
+res://scenes/main.tscn
+res://scripts/card_visual.gd
+res://scenes/card_visual.tscn
+res://scripts/game_manager.gd

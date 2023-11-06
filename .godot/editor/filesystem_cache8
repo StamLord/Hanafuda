@@ -1,0 +1,14 @@
+ea4bc82a6ad023ab7ee23ee620429895
+::res://::1699263464
+icon.svg::CompressedTexture2D::3978979312998301646::1698921765::1698921805::1::::<><>::
+::res://assets/::1699282881
+hanafuda_tex.png::CompressedTexture2D::1328672537287703589::1698927740::1698927782::1::::<><>::
+moon.png::CompressedTexture2D::2683457893492146969::1699283411::1699283427::1::::<><>::
+sakura_particle_0.png::CompressedTexture2D::9082895783809939902::1699269549::1699269599::1::::<><>::
+::res://Hanafuda/::1699263472
+::res://scenes/::1699283322
+card_visual.tscn::PackedScene::6199101534268241706::1699283291::0::1::::<><>::res://scripts/card_visual.gd
+main.tscn::PackedScene::252370257297145971::1699283322::0::1::::<><>::uid://d2n274ktce3mw::::res://assets/sakura_particle_0.png<>res://scripts/game_manager.gd<>uid://beh5fok6yl1wn::::res://assets/moon.png
+::res://scripts/::1699283291
+card_visual.gd::GDScript::-1::1699258827::0::1::::<>TextureRect<>::
+game_manager.gd::GDScript::-1::1699283291::0::1::::<>Node<>::
