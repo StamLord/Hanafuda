@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://duirbp0x8deh"]
+[gd_scene load_steps=16 format=3 uid="uid://duirbp0x8deh"]
 
 [ext_resource type="Texture2D" uid="uid://d2n274ktce3mw" path="res://assets/sakura_particle_0.png" id="1_sbtaj"]
 [ext_resource type="Script" path="res://scripts/game_manager.gd" id="1_t2s8w"]
@@ -68,6 +68,8 @@ gradient = SubResource("Gradient_mpahf")
 fill_from = Vector2(0.5, 1)
 fill_to = Vector2(0.5, 0)
 metadata/_snap_enabled = true
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2nxq8"]
 
 [node name="main" type="Node2D"]
 
@@ -461,12 +463,14 @@ theme_override_constants/separation = 0
 [node name="yaku_popup" type="Panel" parent="game_manager/CanvasLayer/Control"]
 unique_name_in_owner = true
 visible = false
+top_level = true
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_2nxq8")
 
 [node name="yaku_name" type="Label" parent="game_manager/CanvasLayer/Control/yaku_popup"]
 unique_name_in_owner = true
@@ -479,6 +483,7 @@ offset_top = -164.0
 offset_bottom = -65.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/outline_size = 12
 theme_override_font_sizes/font_size = 70
 text = "YAKU"
 horizontal_alignment = 1
@@ -497,6 +502,7 @@ offset_right = -2.0
 offset_bottom = 21.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/outline_size = 10
 theme_override_font_sizes/font_size = 40
 text = "+30 POINTS"
 horizontal_alignment = 1

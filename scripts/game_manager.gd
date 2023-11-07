@@ -92,6 +92,10 @@ const sakura_viewing_sake = {
 @export var animation_speed = 0.2
 @export var turn_glow_speed = 0.2
 
+@export var yaku_color_schemes = {
+	"Moon Viewing Sake" : {"color" : "fbfbfb", "outline_color" : "2c3749"},
+	"Sakura Viewing Sake" : {"color" : "feafd0", "outline_color" : "be3749"}
+}
 # References
 var card_visual_path = preload("res://scenes/card_visual.tscn")
 
@@ -158,10 +162,12 @@ func start_round():
 	
 	# Fake table
 	await add_card({"suite" : 4, "number" : 0}, enemy_hand)
-	await add_card({"suite" : 7, "number" : 0}, field)
-	await add_card({"suite" : 8, "number" : 0}, field)
-	await add_card({"suite" : 8, "number" : 1}, player_hand)
-	await add_card({"suite" : 7, "number" : 1}, player_hand)
+	await add_card({"suite" : 2, "number" : 0}, field) # Sakura
+	await add_card({"suite" : 7, "number" : 0}, field) # Moon
+	await add_card({"suite" : 8, "number" : 0}, field) # Sake
+	await add_card({"suite" : 2, "number" : 1}, player_hand) # Sakura match
+	await add_card({"suite" : 8, "number" : 1}, player_hand) # Sake match
+	await add_card({"suite" : 7, "number" : 1}, player_hand) # Moon match
 	update_table()
 	return
 	
@@ -251,6 +257,20 @@ func show_sakura_glow():
 	await animate_glow(sakura_glow, Vector2(1,1), Vector2(10,10))
 	sakura_particles.emitting = false
 	sakura_glow.visible = false
+	
+func show_moon_glow():
+	# Move in
+	animate_glow(moon_glow, Vector2(1,0), Vector2(1,1))
+	await animate_image(moon_sprite, moon_sprite.global_position - Vector2(0, 600), moon_sprite.global_position)
+	
+	# Wait
+	await get_tree().create_timer(1.5).timeout
+	
+	# Move out
+	await animate_image(moon_sprite, moon_sprite.global_position, moon_sprite.global_position - Vector2(0, 600))
+	await animate_glow(moon_glow, Vector2(1,1), Vector2(1,0))
+	moon_glow.visible = false
+	moon_sprite.visible = false
 	
 
 func animate_glow(glow, from_scale, to_scale):
@@ -465,17 +485,27 @@ func animate_card(card, from, to, from_scale, to_scale):
 
 func animate_yaku(name, points):
 	if name == "Sakura Viewing Sake":
-		await show_sakura_glow()
+		show_sakura_glow()
 	elif name == "Moon Viewing Sake":
-		animate_glow(moon_glow, Vector2(1,0), Vector2(1,1))
-		await animate_image(moon_sprite, moon_sprite.global_position - Vector2(0, 600), moon_sprite.global_position)
-		await get_tree().create_timer(1.5).timeout
-		await animate_glow(sakura_glow, Vector2(1,1), Vector2(1,0))
-		moon_glow.visible = false
-		moon_sprite.visible = false
+		show_moon_glow()
 		
 	yaku_name.text = str(name)
 	yaku_points.text = "+" + str(points) + " points"
+	
+	# Change color scheme
+	if yaku_color_schemes.has(name):
+		yaku_name.add_theme_color_override("font_color", yaku_color_schemes[name]["color"])
+		yaku_name.add_theme_color_override("font_outline_color", yaku_color_schemes[name]["outline_color"])
+		
+		yaku_points.add_theme_color_override("font_color", yaku_color_schemes[name]["color"])
+		yaku_points.add_theme_color_override("font_outline_color", yaku_color_schemes[name]["outline_color"])
+	else:
+		yaku_name.remove_theme_color_override("font_color")
+		yaku_name.remove_theme_color_override("font_outline_color")
+		
+		yaku_points.remove_theme_color_override("font_color")
+		yaku_points.remove_theme_color_override("font_outline_color")
+	
 	yaku_popup.visible = true
 	
 	await get_tree().create_timer(3).timeout
