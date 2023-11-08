@@ -193,6 +193,9 @@ func start_round():
 	
 	update_table()
 	
+	if current_player == 1:
+		cpu_turn()
+	
 
 func draw_card():
 	var card = deck.pop_front()
@@ -225,11 +228,22 @@ func _ready():
 func update_points(points, amount):
 	points.text = str(amount)
 	
+
+func cpu_turn():
+	# Pretend to think
+	await get_tree().create_timer(1).timeout
+	# Select best card
+	card_select(cpu_select(enemy_hand.get_children(), enemy_chaffs, enemy_ribbons, enemy_animals, enemy_brights))
+	
+
 func end_turn():
 	current_player += 1
 	current_player %= 2
 	
 	update_table()
+	
+	if current_player == 1:
+		cpu_turn()
 	
 
 func end_round():
@@ -277,6 +291,8 @@ func end_game():
 	# Show end screen
 	win_screen.visible = true
 	
+	# Next round starts with winner
+	current_player = winner
 	
 func update_glow():
 	if current_player == 0:
@@ -438,6 +454,7 @@ func card_select(card):
 		end_round()
 	else:
 		end_turn()
+	
 
 func prepare_multiple_matches(card):
 	selected_card = card
@@ -454,6 +471,9 @@ func prepare_multiple_matches(card):
 	
 	# Keep waiting for input (awaiting_input will become false due to next select_card)
 	while awaiting_input:
+		if current_player == 1:
+			await card_select(cpu_select(card.matches, enemy_chaffs, enemy_ribbons, enemy_animals, enemy_brights))
+			return
 		await get_tree().process_frame
 
 func move_card(card_object, new_parent):
@@ -789,3 +809,43 @@ func evaluate_all_yaku():
 		yaku.append(sakura_viewing)
 	
 	return yaku
+
+func cpu_select(cards, chaff_matches, ribbon_matches, animal_matches, bright_matches):
+	# Each vector will contain a dictionary with the card and the amount of points 
+	var vectors = []
+	
+	for card in cards:
+		var vector = {"card" : card, "points" : 0}
+		
+		# Card with matches starts at 1
+		if card.matches.size() > 0:
+			vector["points"] = 1
+		
+		var type = get_type(card)
+		
+		if card.suite == 8 and card.number == 0: # Sake
+			vector["points"] *= 8
+		elif type == TYPE.BRIGHT:
+			vector["points"] *= 4
+			vector["points"] += bright_matches.get_child_count()
+		elif type == TYPE.RIBBON:
+			vector["points"] *= 2
+			vector["points"] += ribbon_matches.get_child_count()
+		elif type == TYPE.ANIMAL:
+			vector["points"] *= 2
+			vector["points"] += animal_matches.get_child_count()
+		else:
+			vector["points"] += chaff_matches.get_child_count()
+			
+		vectors.append(vector)
+	
+	var highest_points = -1
+	var highest_card = null
+	
+	for vector in vectors:
+		if vector["points"] > highest_points:
+			highest_points = vector["points"]
+			highest_card = vector["card"]
+	
+	return highest_card
+	
