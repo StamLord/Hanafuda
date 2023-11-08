@@ -97,6 +97,7 @@ const sakura_viewing_sake = {
 	"Moon Viewing Sake" : {"color" : "fbfbfb", "outline_color" : "2c3749"},
 	"Sakura Viewing Sake" : {"color" : "feafd0", "outline_color" : "be3749"}
 }
+
 # References
 var card_visual_path = preload("res://scenes/card_visual.tscn")
 
@@ -133,8 +134,12 @@ var card_visual_path = preload("res://scenes/card_visual.tscn")
 @onready var yaku_name = %yaku_name
 @onready var yaku_points = %yaku_points
 
+@onready var win_screen = %win_screen
+@onready var win_text = %win_screen/win_text
+
 # Game Variables
 var round = 0
+var max_round = 3
 var current_player = 0
 
 var player_points = 0
@@ -246,9 +251,33 @@ func end_round():
 	queue_free_children(enemy_brights)
 	
 	# Start new round
-	start_round()
+	if round < max_round:
+		start_round()
+	else:
+		end_game()
 	
 
+func end_game():
+	# Stop turn glow
+	if current_player == 0:
+		animate_glow(player_glow, Vector2(1,1), Vector2(0,0))
+	else:
+		animate_glow(enemy_glow, Vector2(1,1), Vector2(0,0))
+	
+	var winner = -1 # Draw
+	win_text.text = "DRAW"
+	
+	if player_points > enemy_points:
+		winner = 0 # Player wins
+		win_text.text = "PLAYER WINS!"
+	elif enemy_points > player_points:
+		winner = 1 # Enemy wins
+		win_text.text = "ENEMY WINS!"
+	
+	# Show end screen
+	win_screen.visible = true
+	
+	
 func update_glow():
 	if current_player == 0:
 		animate_glow(player_glow, Vector2(1,0), Vector2(1,1))
