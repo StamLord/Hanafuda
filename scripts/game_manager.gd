@@ -93,6 +93,7 @@ const sakura_viewing_sake = {
 @export var turn_glow_speed = 0.2
 
 @export var yaku_color_schemes = {
+	"Default" : {"color" : "ffffff", "outline_color" : "000000"},
 	"Moon Viewing Sake" : {"color" : "fbfbfb", "outline_color" : "2c3749"},
 	"Sakura Viewing Sake" : {"color" : "feafd0", "outline_color" : "be3749"}
 }
@@ -509,11 +510,11 @@ func animate_yaku(name, points):
 		yaku_points.add_theme_color_override("font_color", yaku_color_schemes[name]["color"])
 		yaku_points.add_theme_color_override("font_outline_color", yaku_color_schemes[name]["outline_color"])
 	else:
-		yaku_name.remove_theme_color_override("font_color")
-		yaku_name.remove_theme_color_override("font_outline_color")
+		yaku_name.add_theme_color_override("font_color", yaku_color_schemes["Default"]["color"])
+		yaku_name.add_theme_color_override("font_outline_color", yaku_color_schemes["Default"]["outline_color"])
 		
-		yaku_points.remove_theme_color_override("font_color")
-		yaku_points.remove_theme_color_override("font_outline_color")
+		yaku_points.add_theme_color_override("font_color", yaku_color_schemes["Default"]["color"])
+		yaku_points.add_theme_color_override("font_outline_color", yaku_color_schemes["Default"]["outline_color"])
 	
 	yaku_popup.visible = true
 	
