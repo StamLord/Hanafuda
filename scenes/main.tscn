@@ -507,3 +507,49 @@ theme_override_font_sizes/font_size = 40
 text = "+30 POINTS"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="player_points" type="HBoxContainer" parent="game_manager/CanvasLayer/Control"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 57.0
+offset_top = 87.0
+offset_right = 189.0
+offset_bottom = 127.0
+grow_vertical = 2
+
+[node name="text" type="Label" parent="game_manager/CanvasLayer/Control/player_points"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "POINTS: "
+
+[node name="points" type="Label" parent="game_manager/CanvasLayer/Control/player_points"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "0
+"
+
+[node name="enemy_points" type="HBoxContainer" parent="game_manager/CanvasLayer/Control"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 57.0
+offset_top = -165.0
+offset_right = 189.0
+offset_bottom = -125.0
+grow_vertical = 2
+
+[node name="text" type="Label" parent="game_manager/CanvasLayer/Control/enemy_points"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "POINTS: "
+
+[node name="points" type="Label" parent="game_manager/CanvasLayer/Control/enemy_points"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "0
+"

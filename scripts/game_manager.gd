@@ -108,6 +108,10 @@ var card_visual_path = preload("res://scenes/card_visual.tscn")
 @onready var sakura_particles = %sakura_burst
 
 @onready var control = $CanvasLayer/Control
+
+@onready var player_points_label = %player_points/points
+@onready var enemy_points_label = %enemy_points/points
+
 @onready var deck_parent = %deck
 
 @onready var field = %field
@@ -161,15 +165,15 @@ func start_round():
 	shuffle_deck()
 	
 	# Fake table
-	await add_card({"suite" : 4, "number" : 0}, enemy_hand)
-	await add_card({"suite" : 2, "number" : 0}, field) # Sakura
-	await add_card({"suite" : 7, "number" : 0}, field) # Moon
-	await add_card({"suite" : 8, "number" : 0}, field) # Sake
-	await add_card({"suite" : 2, "number" : 1}, player_hand) # Sakura match
-	await add_card({"suite" : 8, "number" : 1}, player_hand) # Sake match
-	await add_card({"suite" : 7, "number" : 1}, player_hand) # Moon match
-	update_table()
-	return
+#	await add_card({"suite" : 4, "number" : 0}, enemy_hand)
+#	await add_card({"suite" : 2, "number" : 0}, field) # Sakura
+#	await add_card({"suite" : 7, "number" : 0}, field) # Moon
+#	await add_card({"suite" : 8, "number" : 0}, field) # Sake
+#	await add_card({"suite" : 2, "number" : 1}, player_hand) # Sakura match
+#	await add_card({"suite" : 8, "number" : 1}, player_hand) # Sake match
+#	await add_card({"suite" : 7, "number" : 1}, player_hand) # Moon match
+#	update_table()
+#	return
 	
 	for i in range(4):
 		await add_card(draw_card(), enemy_hand)
@@ -212,6 +216,9 @@ func _ready():
 	start_round()
 	
 
+func update_points(points, amount):
+	points.text = str(amount)
+	
 func end_turn():
 	current_player += 1
 	current_player %= 2
@@ -393,8 +400,10 @@ func card_select(card):
 		
 		if current_player == 0:
 			player_points += points
+			update_points(player_points_label, player_points)
 		else:
 			enemy_points += points
+			update_points(enemy_points_label, enemy_points)
 		
 		end_round()
 	else:
