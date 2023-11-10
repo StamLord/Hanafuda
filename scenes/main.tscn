@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://duirbp0x8deh"]
+[gd_scene load_steps=22 format=3 uid="uid://duirbp0x8deh"]
 
 [ext_resource type="Texture2D" uid="uid://d2n274ktce3mw" path="res://assets/sakura_particle_0.png" id="1_sbtaj"]
 [ext_resource type="Script" path="res://scripts/game_manager.gd" id="1_t2s8w"]
@@ -29,6 +29,54 @@ particles_anim_loop = false
 
 [sub_resource type="QuadMesh" id="QuadMesh_8eamb"]
 material = SubResource("StandardMaterial3D_peumw")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_6d1hp"]
+emission_shape = 3
+emission_box_extents = Vector3(5, 0.1, 5)
+direction = Vector3(0, 1, 0)
+spread = 6.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = -30.0
+initial_velocity_max = -30.0
+scale_min = 0.1
+scale_max = 0.1
+turbulence_influence_min = 0.01
+turbulence_influence_max = 0.02
+turbulence_initial_displacement_min = -3.1
+turbulence_initial_displacement_max = 100.0
+
+[sub_resource type="Curve" id="Curve_56kkx"]
+_data = [Vector2(0, 0), 0.0, 33.6, 0, 0, Vector2(0.110526, 1), 0.0, 0.0, 0, 0, Vector2(0.989474, 0.0526316), -1.35714, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Gradient" id="Gradient_pjt2o"]
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 0.501961)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_wg12n"]
+gradient = SubResource("Gradient_pjt2o")
+fill_from = Vector2(0.5, 1)
+fill_to = Vector2(0.5, 0)
+metadata/_snap_enabled = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_p285a"]
+transparency = 1
+cull_mode = 2
+shading_mode = 0
+albedo_color = Color(1, 1, 1, 0.25098)
+albedo_texture = SubResource("GradientTexture2D_wg12n")
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+use_particle_trails = true
+
+[sub_resource type="RibbonTrailMesh" id="RibbonTrailMesh_yqmjl"]
+material = SubResource("StandardMaterial3D_p285a")
+shape = 0
+size = 0.4
+sections = 4
+curve = SubResource("Curve_56kkx")
 
 [sub_resource type="Gradient" id="Gradient_t0dm2"]
 offsets = PackedFloat32Array(0, 0.496774)
@@ -85,6 +133,17 @@ lifetime = 6.0
 explosiveness = 1.0
 process_material = SubResource("ParticleProcessMaterial_o61i5")
 draw_pass_1 = SubResource("QuadMesh_8eamb")
+
+[node name="rain" type="GPUParticles3D" parent="camera"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.80301, -6)
+cast_shadow = 0
+emitting = false
+amount = 50
+trail_enabled = true
+trail_lifetime = 0.2
+process_material = SubResource("ParticleProcessMaterial_6d1hp")
+draw_pass_1 = SubResource("RibbonTrailMesh_yqmjl")
 
 [node name="game_manager" type="Node2D" parent="."]
 script = ExtResource("1_t2s8w")

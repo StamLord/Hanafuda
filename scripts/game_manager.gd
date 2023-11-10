@@ -108,6 +108,7 @@ var card_visual_path = preload("res://scenes/card_visual.tscn")
 @onready var moon_sprite = %moon_sprite
 
 @onready var sakura_particles = %sakura_burst
+@onready var rain_particles = %rain
 
 @onready var control = $CanvasLayer/Control
 
@@ -317,13 +318,19 @@ func show_moon_glow():
 	await animate_image(moon_sprite, moon_sprite.global_position - Vector2(0, 600), moon_sprite.global_position)
 	
 	# Wait
-	await get_tree().create_timer(1.5).timeout
+	await get_tree().create_timer(2).timeout
 	
 	# Move out
 	await animate_image(moon_sprite, moon_sprite.global_position, moon_sprite.global_position - Vector2(0, 600))
 	await animate_glow(moon_glow, Vector2(1,1), Vector2(1,0))
 	moon_glow.visible = false
 	moon_sprite.visible = false
+	
+
+func show_rain():
+	rain_particles.emitting = true
+	await get_tree().create_timer(3).timeout
+	rain_particles.emitting = false
 	
 
 func animate_glow(glow, from_scale, to_scale):
@@ -547,6 +554,8 @@ func animate_yaku(name, points):
 		show_sakura_glow()
 	elif name == "Moon Viewing Sake":
 		show_moon_glow()
+	elif name == "Rainy Four Bright":
+		show_rain()
 		
 	yaku_name.text = str(name)
 	yaku_points.text = "+" + str(points) + " points"
