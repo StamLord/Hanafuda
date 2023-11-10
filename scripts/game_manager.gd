@@ -135,6 +135,9 @@ var card_visual_path = preload("res://scenes/card_visual.tscn")
 @onready var yaku_name = %yaku_name
 @onready var yaku_points = %yaku_points
 
+@onready var yaku_summary = %yaku_summary
+@onready var yaku_summary_container = %yaku_summary/v_container
+
 @onready var win_screen = %win_screen
 @onready var win_text = %win_screen/win_text
 
@@ -333,6 +336,58 @@ func show_rain():
 	rain_particles.emitting = false
 	
 
+func show_summary(yaku):
+	# Array of arrays: [[label1, label2], [label3, label4]]
+	var lines = []
+	
+	# Clear all labels
+	for child in yaku_summary_container.get_children():
+		var label = child.get_node("Label")
+		var label2 = child.get_node("Label2")
+		
+		# If both exist, add pair
+		if label and label2:
+			lines.append([label, label2])
+		
+		if label:
+			label.text = ""
+		if label2:
+			label2.text = ""
+	
+	# Display summary
+	yaku_summary.visible = true
+	
+	var total_points = 0
+	
+	# Fill in yaku
+	var i = 0
+	for y in yaku:
+		lines[i][0].text = y[0]
+		lines[i][1].text = str(y[1])
+		
+		total_points += y[1]
+		
+		i += 1
+		
+		await get_tree().create_timer(1).timeout
+	
+	# Add multipliers
+	if total_points >= 7:
+		total_points *= 2
+		lines[lines.size()-2][0].text = "Over 7"
+		lines[lines.size()-2][1].text = "x2"
+		await get_tree().create_timer(1).timeout
+	
+	# Total points on last line
+	lines[lines.size()-1][0].text = "Total Points"
+	lines[lines.size()-1][1].text = str(total_points)
+	
+	await get_tree().create_timer(3).timeout
+	
+	# Hide summary
+	yaku_summary.visible = false
+	
+
 func animate_glow(glow, from_scale, to_scale):
 	glow.visible = true
 	var duration = turn_glow_speed * 1000
@@ -450,6 +505,12 @@ func card_select(card):
 			await animate_yaku(y[0], y[1])
 			print(y[0])
 			points += y[1]
+		
+		# Double points if 7 or higher
+		if points >= 7:
+			points *= 2
+		
+		await show_summary(yaku)
 		
 		if current_player == 0:
 			player_points += points

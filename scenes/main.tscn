@@ -639,3 +639,121 @@ theme_override_font_sizes/font_size = 70
 text = "PLAYER WINS"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="yaku_summary" type="Panel" parent="game_manager/CanvasLayer/Control"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="v_container" type="VBoxContainer" parent="game_manager/CanvasLayer/Control/yaku_summary"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 643.0
+offset_top = 312.0
+offset_right = -643.0
+offset_bottom = -312.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="line_1" type="HBoxContainer" parent="game_manager/CanvasLayer/Control/yaku_summary/v_container"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="game_manager/CanvasLayer/Control/yaku_summary/v_container/line_1"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 36
+text = "RAINY FOUR BRIGHT"
+
+[node name="Label2" type="Label" parent="game_manager/CanvasLayer/Control/yaku_summary/v_container/line_1"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 36
+text = "30"
+horizontal_alignment = 2
+
+[node name="line_2" type="HBoxContainer" parent="game_manager/CanvasLayer/Control/yaku_summary/v_container"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="game_manager/CanvasLayer/Control/yaku_summary/v_container/line_2"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 36
+text = "RAINY FOUR BRIGHT"
+
+[node name="Label2" type="Label" parent="game_manager/CanvasLayer/Control/yaku_summary/v_container/line_2"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 36
+text = "30"
+horizontal_alignment = 2
+
+[node name="line_3" type="HBoxContainer" parent="game_manager/CanvasLayer/Control/yaku_summary/v_container"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="game_manager/CanvasLayer/Control/yaku_summary/v_container/line_3"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 36
+text = "RAINY FOUR BRIGHT"
+
+[node name="Label2" type="Label" parent="game_manager/CanvasLayer/Control/yaku_summary/v_container/line_3"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 36
+text = "30"
+horizontal_alignment = 2
+
+[node name="line_4" type="HBoxContainer" parent="game_manager/CanvasLayer/Control/yaku_summary/v_container"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="game_manager/CanvasLayer/Control/yaku_summary/v_container/line_4"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 36
+text = "RAINY FOUR BRIGHT"
+
+[node name="Label2" type="Label" parent="game_manager/CanvasLayer/Control/yaku_summary/v_container/line_4"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 36
+text = "30"
+horizontal_alignment = 2
+
+[node name="line_5" type="HBoxContainer" parent="game_manager/CanvasLayer/Control/yaku_summary/v_container"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="game_manager/CanvasLayer/Control/yaku_summary/v_container/line_5"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 36
+text = "RAINY FOUR BRIGHT"
+
+[node name="Label2" type="Label" parent="game_manager/CanvasLayer/Control/yaku_summary/v_container/line_5"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 36
+text = "30"
+horizontal_alignment = 2
+
+[node name="line_6" type="HBoxContainer" parent="game_manager/CanvasLayer/Control/yaku_summary/v_container"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="game_manager/CanvasLayer/Control/yaku_summary/v_container/line_6"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 36
+text = "RAINY FOUR BRIGHT"
+
+[node name="Label2" type="Label" parent="game_manager/CanvasLayer/Control/yaku_summary/v_container/line_6"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 36
+text = "30"
+horizontal_alignment = 2
