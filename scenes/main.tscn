@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://duirbp0x8deh"]
+[gd_scene load_steps=25 format=3 uid="uid://duirbp0x8deh"]
 
 [ext_resource type="Texture2D" uid="uid://d2n274ktce3mw" path="res://assets/sakura_particle_0.png" id="1_sbtaj"]
 [ext_resource type="Script" path="res://scripts/game_manager.gd" id="1_t2s8w"]
@@ -118,6 +118,18 @@ fill_to = Vector2(0.5, 0)
 metadata/_snap_enabled = true
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2nxq8"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_yo26w"]
+
+[sub_resource type="Gradient" id="Gradient_n5l3l"]
+offsets = PackedFloat32Array(0.345029, 0.491228, 0.654971)
+colors = PackedColorArray(0, 0, 0, 0, 0, 0, 0, 0.501961, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_s57ml"]
+gradient = SubResource("Gradient_n5l3l")
+fill_from = Vector2(0.5, 0)
+fill_to = Vector2(0.5, 1)
+metadata/_snap_enabled = true
 
 [node name="main" type="Node2D"]
 
@@ -757,3 +769,119 @@ size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 36
 text = "30"
 horizontal_alignment = 2
+
+[node name="koikoi_selection" type="Panel" parent="game_manager/CanvasLayer/Control"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -415.0
+offset_top = -70.0
+offset_right = 415.0
+offset_bottom = 70.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="h_container" type="HBoxContainer" parent="game_manager/CanvasLayer/Control/koikoi_selection"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 24.0
+offset_top = 18.0
+offset_right = -24.0
+offset_bottom = -18.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 24
+alignment = 1
+
+[node name="koikoi_btn" type="Button" parent="game_manager/CanvasLayer/Control/koikoi_selection/h_container"]
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Keep going and risk loosing the round for the chance to imrpove your hand."
+theme_override_font_sizes/font_size = 64
+text = "Koi Koi"
+
+[node name="finish_btn" type="Button" parent="game_manager/CanvasLayer/Control/koikoi_selection/h_container"]
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Finish the round to win with the current yaku."
+theme_override_font_sizes/font_size = 64
+text = "Finish"
+
+[node name="koikoi_popup" type="Panel" parent="game_manager/CanvasLayer/Control"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_yo26w")
+
+[node name="gradient" type="TextureRect" parent="game_manager/CanvasLayer/Control/koikoi_popup"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("GradientTexture2D_s57ml")
+
+[node name="Label" type="Label" parent="game_manager/CanvasLayer/Control/koikoi_popup"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 0.105882, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 12
+theme_override_font_sizes/font_size = 120
+text = "KOI-KOI"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="finish_popup" type="Panel" parent="game_manager/CanvasLayer/Control"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_yo26w")
+
+[node name="gradient" type="TextureRect" parent="game_manager/CanvasLayer/Control/finish_popup"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("GradientTexture2D_s57ml")
+
+[node name="Label" type="Label" parent="game_manager/CanvasLayer/Control/finish_popup"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 12
+theme_override_font_sizes/font_size = 120
+text = "FINISH"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="pressed" from="game_manager/CanvasLayer/Control/koikoi_selection/h_container/koikoi_btn" to="game_manager" method="_on_koikoi_pressed"]
+[connection signal="pressed" from="game_manager/CanvasLayer/Control/koikoi_selection/h_container/finish_btn" to="game_manager" method="_on_finish_pressed"]

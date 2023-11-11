@@ -135,6 +135,10 @@ var card_visual_path = preload("res://scenes/card_visual.tscn")
 @onready var yaku_name = %yaku_name
 @onready var yaku_points = %yaku_points
 
+@onready var koikoi_selection = %koikoi_selection
+@onready var koikoi_popup = %koikoi_popup
+@onready var finish_popup = %finish_popup
+
 @onready var yaku_summary = %yaku_summary
 @onready var yaku_summary_container = %yaku_summary/v_container
 
@@ -153,6 +157,13 @@ var deck : Array
 
 var awaiting_input = false
 var selected_card = null
+
+signal koikoi_signal(state)
+var player_koikoi = false
+var player_koikoi_points = 0
+
+var enemy_koikoi = false
+var enemy_koikoi_points = 0
 
 func create_deck():
 	deck.clear()
@@ -252,6 +263,10 @@ func end_turn():
 
 func end_round():
 	round += 1
+	
+	# Reset koikoi flags
+	player_koikoi = false
+	enemy_koikoi = false
 	
 	# Clear board
 	queue_free_children(player_hand)
@@ -372,9 +387,17 @@ func show_summary(yaku):
 		await get_tree().create_timer(1).timeout
 	
 	# Add multipliers
+	# Over 7
 	if total_points >= 7:
 		total_points *= 2
-		lines[lines.size()-2][0].text = "Over 7"
+		lines[lines.size()-3][0].text = "Over 7"
+		lines[lines.size()-3][1].text = "x2"
+		await get_tree().create_timer(1).timeout
+	
+	# Opposite player koikoi
+	if current_player == 0 and enemy_koikoi or current_player == 1 and player_koikoi:
+		total_points *= 2
+		lines[lines.size()-2][0].text = "Koi-Koi"
 		lines[lines.size()-2][1].text = "x2"
 		await get_tree().create_timer(1).timeout
 	
@@ -386,6 +409,30 @@ func show_summary(yaku):
 	
 	# Hide summary
 	yaku_summary.visible = false
+	
+
+func show_koikoi_selection():
+	koikoi_selection.visible = true
+	
+	# Wait for either koikoi or finish
+	var is_koikoi = await koikoi_signal
+	
+	koikoi_selection.visible = false
+	
+	# Show relevant popup
+	await show_koikoi_popup(is_koikoi)
+	
+	return is_koikoi
+	
+
+func show_koikoi_popup(is_koikoi):
+	var popup = finish_popup
+	if is_koikoi:
+		popup = koikoi_popup
+	
+	popup.visible = true
+	await get_tree().create_timer(3).timeout
+	popup.visible = false
 	
 
 func animate_glow(glow, from_scale, to_scale):
@@ -500,15 +547,48 @@ func card_select(card):
 	var yaku = evaluate_all_yaku()
 	
 	if yaku.size() > 0:
-		var points = 0
+		var base_points = evaluate_base_points(yaku)
+		var points = base_points
+		
+		# If we are in koikoi, we need to make sure we have a better hand 
+		# than previous. Otherwise, turn ends normally without any yaku
+		if current_player == 0 and player_koikoi and base_points <= player_koikoi_points:
+			print("Prev points: " + str(player_koikoi_points) + " New points: " + str(base_points))
+			end_turn()
+			return
+		elif current_player == 1 and enemy_koikoi and base_points <= enemy_koikoi_points:
+			print("Prev points: " + str(enemy_koikoi_points) + " New points: " + str(base_points))
+			end_turn()
+			return
+		
 		for y in yaku:
 			await animate_yaku(y[0], y[1])
 			print(y[0])
-			points += y[1]
 		
 		# Double points if 7 or higher
 		if points >= 7:
 			points *= 2
+		
+		# Opposite player koikoi
+		if current_player == 0 and enemy_koikoi or current_player == 1 and player_koikoi:
+			points *= 2
+		
+		# Wait for choice to continue (koikoi) or finish round
+		var is_koikoi = false
+		
+		if current_player == 0:
+			is_koikoi = await show_koikoi_selection()
+			if is_koikoi:
+				player_koikoi_points = base_points # Track this hand's points to compare next one
+		else:
+			is_koikoi = await cpu_select_koikoi()
+			if is_koikoi:
+				enemy_koikoi_points = base_points
+		
+		# End turn and conitnue playing
+		if is_koikoi:
+			end_turn()
+			return
 		
 		await show_summary(yaku)
 		
@@ -580,6 +660,7 @@ func from_deck_to_field():
 	
 	else:
 		await prepare_multiple_matches(card_object)
+	
 
 func card_press_up(card):
 	# Only remove highlight if we are not waiting for multiple choice selection
@@ -819,6 +900,7 @@ func evaluate_moon_viewing_sake(brights, animals):
 		return null
 	return [moon_viewing_sake["name"], moon_viewing_sake["points"]]
 	
+
 func evaluate_sakura_viewing_sake(brights, animals):
 	var found_sakura = false
 	for child in brights.get_children():
@@ -879,6 +961,15 @@ func evaluate_all_yaku():
 		yaku.append(sakura_viewing)
 	
 	return yaku
+	
+
+func evaluate_base_points(all_yaku):
+	var points = 0
+	for yaku in all_yaku:
+		points += yaku[1]
+	
+	return points
+	
 
 func cpu_select(cards, chaff_matches, ribbon_matches, animal_matches, bright_matches):
 	# Each vector will contain a dictionary with the card and the amount of points 
@@ -919,3 +1010,30 @@ func cpu_select(cards, chaff_matches, ribbon_matches, animal_matches, bright_mat
 	
 	return highest_card
 	
+
+func _on_koikoi_pressed():
+	if current_player == 0:
+		player_koikoi = true
+	else:
+		enemy_koikoi = true
+	
+	koikoi_signal.emit(true)
+	
+
+func _on_finish_pressed():
+	koikoi_signal.emit(false)
+	
+
+func cpu_select_koikoi():
+	# Pretend to think
+	await get_tree().create_timer(1).timeout
+	
+	# For now, always choose to finish
+	var is_koikoi = false
+	
+	if is_koikoi:
+		_on_koikoi_pressed()
+	else:
+		_on_finish_pressed()
+	
+	await show_koikoi_popup(is_koikoi)
