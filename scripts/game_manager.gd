@@ -138,6 +138,7 @@ var card_visual_path = preload("res://scenes/card_visual.tscn")
 @onready var koikoi_selection = %koikoi_selection
 @onready var koikoi_popup = %koikoi_popup
 @onready var finish_popup = %finish_popup
+@onready var draw_popup = %draw_popup
 
 @onready var yaku_summary = %yaku_summary
 @onready var yaku_summary_container = %yaku_summary/v_container
@@ -255,11 +256,33 @@ func end_turn():
 	current_player += 1
 	current_player %= 2
 	
-	update_table()
+	# No more cards on field, both hands are empty or deck is empty
+	if field.get_child_count() < 1 or player_hand.get_child_count() < 1 and enemy_hand.get_child_count() < 1 or deck.size() < 1:
+		end_round_draw()
+		return
 	
+	# Next player's hand
+	var hand = player_hand
+	if current_player == 1:
+		hand = enemy_hand
+	
+	# If next player has no cards, pass turn
+	if hand.get_child_count() < 1:
+		current_player += 1
+		current_player %= 2
+	
+	update_table()
+		
 	if current_player == 1:
 		cpu_turn()
 	
+
+func end_round_draw():
+	print("DRAW")
+	draw_popup.visible = true
+	await get_tree().create_timer(3).timeout
+	draw_popup.visible = false
+	end_round()
 
 func end_round():
 	round += 1
