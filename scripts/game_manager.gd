@@ -227,8 +227,10 @@ func create_card_object(card):
 	button.pressed.connect(card_select.bind(card_object))
 	button.button_down.connect(card_press_down.bind(card_object))
 	button.button_up.connect(card_press_up.bind(card_object))
+	button.tooltip_text = card_to_string(card)
 	
 	card_object.set_card(card)
+	
 	return card_object
 	
 
@@ -336,6 +338,7 @@ func end_game():
 	# Next round starts with winner
 	current_player = winner
 	
+
 func update_glow():
 	if current_player == 0:
 		animate_glow(player_glow, Vector2(1,0), Vector2(1,1))
@@ -832,7 +835,7 @@ func match_cards(card1, card2):
 	
 
 func card_to_string(card):
-	return SUITE.keys()[card.suite] + " " + str(get_type(card)) + " [" + str(card.number) + "]"
+	return SUITE.keys()[card.suite] + " " + str(TYPE.keys()[get_type(card)])
 
 func evaluate_yaku(yaku_set, matches):
 	var yaku_name = null
