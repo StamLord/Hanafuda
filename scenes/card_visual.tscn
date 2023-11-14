@@ -1,5 +1,6 @@
-[gd_scene load_steps=8 format=3 uid="uid://cuk5kc3mjhac5"]
+[gd_scene load_steps=10 format=3 uid="uid://cuk5kc3mjhac5"]
 
+[ext_resource type="Shader" uid="uid://drhfi4xu6gkhc" path="res://scenes/card_highlight.tres" id="2_61mxy"]
 [ext_resource type="Script" path="res://scripts/card_visual.gd" id="2_81oka"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_q477c"]
@@ -10,12 +11,16 @@ resource_local_to_scene = true
 atlas = SubResource("CompressedTexture2D_q477c")
 region = Rect2(0, 0, 118, 192)
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mshkc"]
+shader = ExtResource("2_61mxy")
+shader_parameter/scroll_speed = 0.25
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_v763g"]
 draw_center = false
-border_width_left = 4
-border_width_top = 4
-border_width_right = 4
-border_width_bottom = 4
+border_width_left = 7
+border_width_top = 7
+border_width_right = 7
+border_width_bottom = 7
 border_color = Color(1, 1, 0, 1)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_bq4f1"]
@@ -36,6 +41,7 @@ script = ExtResource("2_81oka")
 
 [node name="highlight" type="Panel" parent="."]
 visible = false
+material = SubResource("ShaderMaterial_mshkc")
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
