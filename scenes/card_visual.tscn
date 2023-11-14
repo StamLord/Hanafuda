@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://cuk5kc3mjhac5"]
+[gd_scene load_steps=8 format=3 uid="uid://cuk5kc3mjhac5"]
 
 [ext_resource type="Script" path="res://scripts/card_visual.gd" id="2_81oka"]
 
@@ -23,8 +23,13 @@ border_color = Color(1, 1, 0, 1)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5dw6s"]
 bg_color = Color(1, 1, 0, 0.501961)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_m31i3"]
+bg_color = Color(0.12549, 0.0862745, 0.0823529, 1)
+
 [node name="card_visual" type="TextureRect"]
-scale = Vector2(0.5, 0.5)
+offset_right = 118.0
+offset_bottom = 192.0
+pivot_offset = Vector2(59, 96)
 texture = SubResource("AtlasTexture_n5dve")
 stretch_mode = 2
 script = ExtResource("2_81oka")
@@ -49,3 +54,13 @@ grow_vertical = 2
 theme_override_styles/normal = SubResource("StyleBoxEmpty_bq4f1")
 theme_override_styles/hover = SubResource("StyleBoxFlat_5dw6s")
 theme_override_styles/disabled = SubResource("StyleBoxEmpty_bq4f1")
+
+[node name="backface" type="Panel" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_m31i3")

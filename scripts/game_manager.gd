@@ -98,6 +98,8 @@ const sakura_viewing_sake = {
 	"Sakura Viewing Sake" : {"color" : "feafd0", "outline_color" : "be3749"}
 }
 
+@export var show_enemy_hand = false
+
 # References
 var card_visual_path = preload("res://scenes/card_visual.tscn")
 
@@ -198,8 +200,8 @@ func start_round():
 #	return
 	
 	for i in range(4):
-		await add_card(draw_card(), enemy_hand)
-		await add_card(draw_card(), enemy_hand)
+		await add_card(draw_card(), enemy_hand, show_enemy_hand)
+		await add_card(draw_card(), enemy_hand, show_enemy_hand)
 		
 		await add_card(draw_card(), field)
 		await add_card(draw_card(), field)
@@ -218,7 +220,7 @@ func draw_card():
 	return card
 	
 
-func create_card_object(card):
+func create_card_object(card, face_up = true):
 	var card_object = card_visual_path.instantiate()
 	deck_parent.add_child(card_object)
 	
@@ -230,12 +232,13 @@ func create_card_object(card):
 	button.tooltip_text = card_to_string(card)
 	
 	card_object.set_card(card)
+	card_object.set_face_up(face_up)
 	
 	return card_object
 	
 
-func add_card(card, hand):
-	var card_object = create_card_object(card)
+func add_card(card, hand, face_up = true):
+	var card_object = create_card_object(card, face_up)
 	await move_card(card_object, hand)
 	
 
@@ -553,6 +556,10 @@ func card_select(card):
 	# Disable hand to prevent further card selection
 	disable_hand(hand)
 	
+	# Flip card up if face down
+	if not card.face_up:
+		await card.flip_up()
+	
 	# Field
 	if card.matches.size() == 0:
 		await move_card(card, field)
@@ -661,7 +668,8 @@ func move_card(card_object, new_parent):
 	card_object.global_position = old_pos
 	
 	var from = card_object.global_position
-	var to = new_parent.global_position + Vector2(card_object.size.x * new_parent.scale.x, 0) * new_parent.get_child_count()
+	var width = card_object.size.x * new_parent.scale.x
+	var to = new_parent.global_position + Vector2(width * new_parent.get_child_count(), 0)
 	
 	if old_parent:
 		await animate_card(card_object, from, to, old_parent.scale, new_parent.scale)
@@ -818,11 +826,12 @@ func match_cards(card1, card2):
 	# Move both cards from field to match
 	from = card1.global_position
 	to = matches_1.global_position + Vector2(card1.size.x * 0.5, 0) * matches_1.get_child_count()
-	animate_card(card1, from, to, parent2.scale, matches_1.get_parent().scale)
+	# Use parent2 scale as origin for both cards
+	animate_card(card1, from, to, parent2.scale, matches_1.get_parent().get_parent().scale)
 	
 	from = card2.global_position
 	to = matches_2.global_position + Vector2(card2.size.x * 0.5, 0) * matches_2.get_child_count()
-	await animate_card(card2, from, to, parent2.scale, matches_2.get_parent().scale)
+	await animate_card(card2, from, to, parent2.scale, matches_2.get_parent().get_parent().scale)
 	
 	# Re-Parent
 	control.remove_child(card1)

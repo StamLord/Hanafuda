@@ -166,8 +166,8 @@ color = Color(0, 1, 1, 1)
 color_ramp = SubResource("GradientTexture1D_donm1")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_akww2"]
+shading_mode = 0
 albedo_texture = ExtResource("4_gh55e")
-roughness = 0.8
 texture_filter = 0
 
 [node name="main" type="Node2D"]
@@ -198,7 +198,6 @@ draw_pass_1 = SubResource("RibbonTrailMesh_yqmjl")
 
 [node name="game_manager" type="Node2D" parent="."]
 script = ExtResource("1_t2s8w")
-animation_speed = 0.25
 
 [node name="CanvasLayer" type="CanvasLayer" parent="game_manager"]
 
@@ -211,6 +210,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="bg" type="TextureRect" parent="game_manager/CanvasLayer/Control"]
+visible = false
 texture_filter = 1
 layout_mode = 1
 anchors_preset = 8
@@ -318,10 +318,9 @@ layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -480.0
-offset_top = 29.0
-offset_right = 472.0
-offset_bottom = 221.0
+offset_left = -476.0
+offset_right = 476.0
+offset_bottom = 192.0
 grow_horizontal = 2
 scale = Vector2(1.25, 1.25)
 pivot_offset = Vector2(476, 0)
@@ -995,12 +994,12 @@ script = ExtResource("8_mrnfb")
 
 [node name="table" type="CSGBox3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, -0.487522)
-visible = false
 material_override = SubResource("StandardMaterial3D_akww2")
 size = Vector3(1, 0.2, 1)
 
 [node name="OmniLight3D" type="OmniLight3D" parent="table"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -4.37114e-08)
+visible = false
 
 [connection signal="pressed" from="game_manager/CanvasLayer/Control/koikoi_selection/h_container/koikoi_btn" to="game_manager" method="_on_koikoi_pressed"]
 [connection signal="pressed" from="game_manager/CanvasLayer/Control/koikoi_selection/h_container/finish_btn" to="game_manager" method="_on_finish_pressed"]
