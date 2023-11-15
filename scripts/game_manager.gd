@@ -95,7 +95,10 @@ const sakura_viewing_sake = {
 @export var yaku_color_schemes = {
 	"Default" : {"color" : "ffffff", "outline_color" : "000000"},
 	"Moon Viewing Sake" : {"color" : "fbfbfb", "outline_color" : "2c3749"},
-	"Sakura Viewing Sake" : {"color" : "feafd0", "outline_color" : "be3749"}
+	"Sakura Viewing Sake" : {"color" : "feafd0", "outline_color" : "be3749"},
+	"Poetry Ribbons" : {"color" : "ff1b00", "outline_color" : "ffffff"},
+	"Blue Ribbons" : {"color" : "1a56ff", "outline_color" : "ffffff"},
+	"Ribbons" : {"color" : "ff1b00", "outline_color" : "000000"}
 }
 
 @export var show_enemy_hand = false
