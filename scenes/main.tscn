@@ -1,8 +1,9 @@
-[gd_scene load_steps=37 format=3 uid="uid://duirbp0x8deh"]
+[gd_scene load_steps=40 format=3 uid="uid://duirbp0x8deh"]
 
 [ext_resource type="Texture2D" uid="uid://d2n274ktce3mw" path="res://assets/sakura_particle_0.png" id="1_sbtaj"]
 [ext_resource type="Script" path="res://scripts/game_manager.gd" id="1_t2s8w"]
 [ext_resource type="Texture2D" uid="uid://beh5fok6yl1wn" path="res://assets/moon.png" id="3_br8kj"]
+[ext_resource type="Shader" uid="uid://ct2ed7d3cmyqc" path="res://scenes/turn_glow.tres" id="4_duy1h"]
 [ext_resource type="Texture2D" uid="uid://bs6ktj8clihxh" path="res://assets/wood_512.png" id="4_gh55e"]
 [ext_resource type="Script" path="res://scripts/fps_counter.gd" id="4_m8hwq"]
 [ext_resource type="Shader" uid="uid://dmvkh8pdpdqm4" path="res://shockwave_particle.tres" id="6_fsn3l"]
@@ -83,23 +84,33 @@ size = 0.4
 sections = 4
 curve = SubResource("Curve_56kkx")
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7emgr"]
+shader = ExtResource("4_duy1h")
+shader_parameter/speed_1 = 0.05
+shader_parameter/speed_2 = 0.025
+
 [sub_resource type="Gradient" id="Gradient_t0dm2"]
 offsets = PackedFloat32Array(0, 0.496774)
-colors = PackedColorArray(0.262745, 0.486275, 0.6, 0.294118, 0.262745, 0.486275, 0.6, 0)
+colors = PackedColorArray(0.321569, 0.45098, 1, 0.501961, 0.321569, 0.45098, 1, 0)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_wrops"]
 gradient = SubResource("Gradient_t0dm2")
 fill_from = Vector2(0.5, 1)
-fill_to = Vector2(0.5, 0)
+fill_to = Vector2(0.5, 0.2)
 metadata/_snap_enabled = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_14woc"]
+shader = ExtResource("4_duy1h")
+shader_parameter/speed_1 = -0.05
+shader_parameter/speed_2 = -0.025
 
 [sub_resource type="Gradient" id="Gradient_407p3"]
 offsets = PackedFloat32Array(0.490323, 0.967742)
-colors = PackedColorArray(0.992157, 0, 0, 0, 0.992157, 0, 0, 0.294118)
+colors = PackedColorArray(0.992157, 0, 0, 0, 0.992157, 0, 0, 0.501961)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_u0esl"]
 gradient = SubResource("Gradient_407p3")
-fill_from = Vector2(0.5, 1)
+fill_from = Vector2(0.5, 0.8)
 fill_to = Vector2(0.5, 0)
 metadata/_snap_enabled = true
 
@@ -241,6 +252,7 @@ grow_vertical = 2
 [node name="player_glow" type="TextureRect" parent="game_manager/CanvasLayer/Control/screen_fx"]
 unique_name_in_owner = true
 visible = false
+material = SubResource("ShaderMaterial_7emgr")
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -253,6 +265,7 @@ texture = SubResource("GradientTexture2D_wrops")
 [node name="enemy_glow" type="TextureRect" parent="game_manager/CanvasLayer/Control/screen_fx"]
 unique_name_in_owner = true
 visible = false
+material = SubResource("ShaderMaterial_14woc")
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
