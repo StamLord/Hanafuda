@@ -792,28 +792,23 @@ func get_matches_parent(card):
 
 func match_cards(card1, card2):
 	print("Matching: " + card_to_string(card1) + " and "  + card_to_string(card2))
+	
+	# Get parents
 	var parent1 = card1.get_parent()
 	var parent2 = card2.get_parent()
 	
+	# Reposition card1 in a neutral context
 	var pos1 = card1.global_position
-	var pos2 = card2.global_position
 	
 	if parent1:
 		parent1.remove_child(card1)
 	
-	if parent2:
-		parent2.remove_child(card2)
-	
-	# Reposition in a neutral context
-	control.add_child(card1)
-	control.add_child(card2)
+	control.add_child(card1)	
 	
 	card1.scale = parent1.scale
-	card2.scale = parent2.scale
-	
 	card1.global_position = pos1
-	card2.global_position = pos2
 	
+	# Get the match parent (bright, animals, etc.)
 	var matches_1 = get_matches_parent(card1)
 	var matches_2 = get_matches_parent(card2)
 	
@@ -825,6 +820,18 @@ func match_cards(card1, card2):
 	
 	# Pause
 	await get_tree().create_timer(0.5).timeout
+	
+	# We move card2 from the field to a netural context,
+	# only after moving card1 to avoid premature hbox update
+	var pos2 = card2.global_position
+	
+	if parent2:
+		parent2.remove_child(card2)
+	
+	control.add_child(card2)
+	
+	card2.scale = parent2.scale
+	card2.global_position = pos2
 	
 	# Move both cards from field to match
 	from = card1.global_position
