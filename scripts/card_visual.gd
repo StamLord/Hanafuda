@@ -15,7 +15,7 @@ func set_card(card):
 	
 
 func update_texture():
-	texture.region = Rect2(118 * number, 192 * suite, 118, 192)
+	texture.region = Rect2(117 * number, 192 * suite, 117, 192)
 	
 func highlight(state : bool):
 	highlight_border.visible = state

@@ -9,13 +9,14 @@ load_path = "res://.godot/imported/hanafuda_tex.png-c26dd941c087410284376b778833
 [sub_resource type="AtlasTexture" id="AtlasTexture_n5dve"]
 resource_local_to_scene = true
 atlas = SubResource("CompressedTexture2D_q477c")
-region = Rect2(0, 0, 118, 192)
+region = Rect2(0, 0, 117, 192)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_mshkc"]
 shader = ExtResource("2_61mxy")
 shader_parameter/scroll_speed = 0.25
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_v763g"]
+bg_color = Color(1, 1, 0, 1)
 draw_center = false
 border_width_left = 7
 border_width_top = 7
@@ -32,7 +33,7 @@ bg_color = Color(1, 1, 0, 0.501961)
 bg_color = Color(0.12549, 0.0862745, 0.0823529, 1)
 
 [node name="card_visual" type="TextureRect"]
-offset_right = 118.0
+offset_right = 117.0
 offset_bottom = 192.0
 pivot_offset = Vector2(59, 96)
 texture = SubResource("AtlasTexture_n5dve")
