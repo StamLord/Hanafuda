@@ -1,4 +1,4 @@
-[gd_scene load_steps=49 format=3 uid="uid://duirbp0x8deh"]
+[gd_scene load_steps=51 format=3 uid="uid://duirbp0x8deh"]
 
 [ext_resource type="Texture2D" uid="uid://d2n274ktce3mw" path="res://assets/sakura_particle_0.png" id="1_sbtaj"]
 [ext_resource type="Script" path="res://scripts/game_manager.gd" id="1_t2s8w"]
@@ -10,6 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://vhsxc5sjn1al" path="res://assets/back_face.png" id="6_36fg4"]
 [ext_resource type="Shader" uid="uid://dmvkh8pdpdqm4" path="res://shockwave_particle.tres" id="6_fsn3l"]
 [ext_resource type="Texture2D" uid="uid://coiu0mqu3mwj7" path="res://assets/shockwave_64.png" id="7_1fe5k"]
+[ext_resource type="Shader" uid="uid://cg8n1msruev18" path="res://scenes/card_back.tres" id="7_71hxd"]
 [ext_resource type="Script" path="res://scenes/mouse_click_particles.gd" id="8_mrnfb"]
 
 [sub_resource type="Gradient" id="Gradient_4nh6f"]
@@ -172,6 +173,9 @@ gradient = SubResource("Gradient_mpahf")
 fill_from = Vector2(0.5, 1)
 fill_to = Vector2(0.5, 0)
 metadata/_snap_enabled = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bgnef"]
+shader = ExtResource("7_71hxd")
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2nxq8"]
 
@@ -374,6 +378,7 @@ texture = ExtResource("3_br8kj")
 
 [node name="deck" type="TextureRect" parent="game_manager/CanvasLayer/Control"]
 unique_name_in_owner = true
+material = SubResource("ShaderMaterial_bgnef")
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5

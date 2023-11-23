@@ -1,7 +1,8 @@
-[gd_scene load_steps=10 format=3 uid="uid://cuk5kc3mjhac5"]
+[gd_scene load_steps=12 format=3 uid="uid://cuk5kc3mjhac5"]
 
 [ext_resource type="Shader" uid="uid://drhfi4xu6gkhc" path="res://scenes/card_highlight.tres" id="2_61mxy"]
 [ext_resource type="Script" path="res://scripts/card_visual.gd" id="2_81oka"]
+[ext_resource type="Shader" uid="uid://cg8n1msruev18" path="res://scenes/card_back.tres" id="3_hjh7g"]
 [ext_resource type="Texture2D" uid="uid://vhsxc5sjn1al" path="res://assets/back_face.png" id="3_txv8i"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_q477c"]
@@ -29,6 +30,9 @@ border_color = Color(1, 1, 0, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5dw6s"]
 bg_color = Color(1, 1, 0, 0.501961)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_madpd"]
+shader = ExtResource("3_hjh7g")
 
 [node name="card_visual" type="TextureRect"]
 offset_right = 117.0
@@ -62,6 +66,7 @@ theme_override_styles/disabled = SubResource("StyleBoxEmpty_bq4f1")
 
 [node name="backface" type="TextureRect" parent="."]
 visible = false
+material = SubResource("ShaderMaterial_madpd")
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
