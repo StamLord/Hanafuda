@@ -208,6 +208,16 @@ trail_lifetime = 0.2
 process_material = SubResource("ParticleProcessMaterial_6d1hp")
 draw_pass_1 = SubResource("RibbonTrailMesh_yqmjl")
 
+[node name="audio_players" type="Node3D" parent="camera"]
+
+[node name="audio_player1" type="AudioStreamPlayer2D" parent="camera/audio_players"]
+
+[node name="audio_player2" type="AudioStreamPlayer2D" parent="camera/audio_players"]
+
+[node name="audio_player3" type="AudioStreamPlayer2D" parent="camera/audio_players"]
+
+[node name="audio_player4" type="AudioStreamPlayer2D" parent="camera/audio_players"]
+
 [node name="game_manager" type="Node2D" parent="."]
 script = ExtResource("1_t2s8w")
 
@@ -997,6 +1007,7 @@ offset_bottom = 23.0
 script = ExtResource("4_m8hwq")
 
 [node name="mouse_particle" type="GPUParticles2D" parent="game_manager/CanvasLayer"]
+z_index = 10
 texture_filter = 1
 material = SubResource("ShaderMaterial_pimwt")
 position = Vector2(75, 519)

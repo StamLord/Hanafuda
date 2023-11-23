@@ -151,6 +151,23 @@ var card_visual_path = preload("res://scenes/card_visual.tscn")
 @onready var win_screen = %win_screen
 @onready var win_text = %win_screen/win_text
 
+@onready var audio_players = $"../camera/audio_players"
+
+@onready var draw_sounds = [
+	preload("res://assets/audio/cardSlide4.wav"), 
+	preload("res://assets/audio/cardSlide5.wav"), 
+	preload("res://assets/audio/cardSlide6.wav"),
+	preload("res://assets/audio/cardSlide7.wav")]
+
+@onready var place_sounds = [
+	preload("res://assets/audio/cardPlace1.wav"), 
+	preload("res://assets/audio/cardPlace2.wav"), 
+	preload("res://assets/audio/cardPlace3.wav"),
+	preload("res://assets/audio/cardPlace4.wav")]
+
+@onready var match_sounds = [
+	preload("res://assets/audio/cardShove1.wav")]
+	
 # Game Variables
 var round = 0
 var max_round = 3
@@ -224,6 +241,7 @@ func start_round():
 
 func draw_card():
 	var card = deck.pop_front()
+	play_sound(draw_sounds.pick_random())
 	return card
 	
 
@@ -569,6 +587,8 @@ func card_select(card):
 	
 	# Field
 	if card.matches.size() == 0:
+		# Sound
+		play_sound(place_sounds.pick_random())
 		await move_card(card, field)
 	
 	# Match
@@ -823,6 +843,9 @@ func match_cards(card1, card2):
 	var matches_1 = get_matches_parent(card1)
 	var matches_2 = get_matches_parent(card2)
 	
+	# Sound
+	play_sound(place_sounds.pick_random())
+	
 	# Move card1 to card2
 	card1.set_top_level(true)
 	var from = card1.global_position
@@ -843,6 +866,9 @@ func match_cards(card1, card2):
 	
 	card2.scale = parent2.scale
 	card2.global_position = pos2
+	
+	# Sound
+	play_sound(match_sounds.pick_random())
 	
 	# Move both cards from field to match
 	from = card1.global_position
@@ -1093,3 +1119,12 @@ func cpu_select_koikoi():
 		_on_finish_pressed()
 	
 	await show_koikoi_popup(is_koikoi)
+
+func play_sound(sound):
+	for player in audio_players.get_children():
+		if not player.playing:
+			print(player)
+			player.stream = sound
+			player.play()
+			return
+	
