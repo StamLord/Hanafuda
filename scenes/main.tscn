@@ -1,4 +1,4 @@
-[gd_scene load_steps=40 format=3 uid="uid://duirbp0x8deh"]
+[gd_scene load_steps=41 format=3 uid="uid://duirbp0x8deh"]
 
 [ext_resource type="Texture2D" uid="uid://d2n274ktce3mw" path="res://assets/sakura_particle_0.png" id="1_sbtaj"]
 [ext_resource type="Script" path="res://scripts/game_manager.gd" id="1_t2s8w"]
@@ -6,6 +6,7 @@
 [ext_resource type="Shader" uid="uid://ct2ed7d3cmyqc" path="res://scenes/turn_glow.tres" id="4_duy1h"]
 [ext_resource type="Texture2D" uid="uid://bs6ktj8clihxh" path="res://assets/wood_512.png" id="4_gh55e"]
 [ext_resource type="Script" path="res://scripts/fps_counter.gd" id="4_m8hwq"]
+[ext_resource type="Texture2D" uid="uid://vhsxc5sjn1al" path="res://assets/back_face.png" id="6_36fg4"]
 [ext_resource type="Shader" uid="uid://dmvkh8pdpdqm4" path="res://shockwave_particle.tres" id="6_fsn3l"]
 [ext_resource type="Texture2D" uid="uid://coiu0mqu3mwj7" path="res://assets/shockwave_64.png" id="7_1fe5k"]
 [ext_resource type="Script" path="res://scenes/mouse_click_particles.gd" id="8_mrnfb"]
@@ -311,7 +312,7 @@ offset_bottom = 626.0
 grow_horizontal = 2
 texture = ExtResource("3_br8kj")
 
-[node name="deck" type="Panel" parent="game_manager/CanvasLayer/Control"]
+[node name="deck" type="TextureRect" parent="game_manager/CanvasLayer/Control"]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 4
@@ -323,6 +324,7 @@ offset_right = 244.0
 offset_bottom = 96.0
 grow_vertical = 2
 scale = Vector2(0.8, 0.8)
+texture = ExtResource("6_36fg4")
 
 [node name="enemy_hand" type="HBoxContainer" parent="game_manager/CanvasLayer/Control"]
 unique_name_in_owner = true
