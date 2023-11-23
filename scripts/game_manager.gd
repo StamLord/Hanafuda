@@ -346,9 +346,9 @@ func end_round():
 func end_game():
 	# Stop turn glow
 	if current_player == 0:
-		animate_glow(player_glow, Vector2(1,1), Vector2(0,0))
+		animate_glow(player_glow, Vector2(0,1), Vector2(0,0))
 	else:
-		animate_glow(enemy_glow, Vector2(1,1), Vector2(0,0))
+		animate_glow(enemy_glow, Vector2(0,1), Vector2(0,0))
 	
 	var winner = -1 # Draw
 	win_text.text = "DRAW"
