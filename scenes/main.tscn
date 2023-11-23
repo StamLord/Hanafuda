@@ -1,7 +1,8 @@
-[gd_scene load_steps=41 format=3 uid="uid://duirbp0x8deh"]
+[gd_scene load_steps=49 format=3 uid="uid://duirbp0x8deh"]
 
 [ext_resource type="Texture2D" uid="uid://d2n274ktce3mw" path="res://assets/sakura_particle_0.png" id="1_sbtaj"]
 [ext_resource type="Script" path="res://scripts/game_manager.gd" id="1_t2s8w"]
+[ext_resource type="Texture2D" uid="uid://cbwfkqv874gwd" path="res://assets/shockwave_64_2.png" id="2_gmtk5"]
 [ext_resource type="Texture2D" uid="uid://beh5fok6yl1wn" path="res://assets/moon.png" id="3_br8kj"]
 [ext_resource type="Shader" uid="uid://ct2ed7d3cmyqc" path="res://scenes/turn_glow.tres" id="4_duy1h"]
 [ext_resource type="Texture2D" uid="uid://bs6ktj8clihxh" path="res://assets/wood_512.png" id="4_gh55e"]
@@ -11,21 +12,33 @@
 [ext_resource type="Texture2D" uid="uid://coiu0mqu3mwj7" path="res://assets/shockwave_64.png" id="7_1fe5k"]
 [ext_resource type="Script" path="res://scenes/mouse_click_particles.gd" id="8_mrnfb"]
 
+[sub_resource type="Gradient" id="Gradient_4nh6f"]
+offsets = PackedFloat32Array(0.918699, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_nvyhs"]
+gradient = SubResource("Gradient_4nh6f")
+
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_o61i5"]
 emission_shape = 3
-emission_box_extents = Vector3(10, 1, 1)
-direction = Vector3(10, 0, 0)
-gravity = Vector3(0, -2, 0)
-initial_velocity_min = 2.0
-initial_velocity_max = 4.0
-angular_velocity_max = 45.0
+emission_box_extents = Vector3(0.5, 0.5, 0.5)
+direction = Vector3(1, -0.5, 0)
+spread = 20.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 0.5
+initial_velocity_max = 1.0
 angle_max = 360.0
-scale_min = 0.2
-scale_max = 0.4
+scale_min = 0.05
+scale_max = 0.1
+color_ramp = SubResource("GradientTexture1D_nvyhs")
+collision_mode = 1
+collision_friction = 1.0
+collision_bounce = 0.0
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_peumw"]
 transparency = 1
 shading_mode = 0
+vertex_color_use_as_albedo = true
 albedo_color = Color(1, 0.752941, 0.87451, 1)
 albedo_texture = ExtResource("1_sbtaj")
 billboard_mode = 3
@@ -39,18 +52,23 @@ material = SubResource("StandardMaterial3D_peumw")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_6d1hp"]
 emission_shape = 3
-emission_box_extents = Vector3(5, 0.1, 5)
+emission_box_extents = Vector3(1, 0.5, 1)
 direction = Vector3(0, 1, 0)
-spread = 6.0
+spread = 0.0
 gravity = Vector3(0, 0, 0)
-initial_velocity_min = -30.0
-initial_velocity_max = -30.0
+initial_velocity_min = -5.0
+initial_velocity_max = -5.0
 scale_min = 0.1
 scale_max = 0.1
 turbulence_influence_min = 0.01
 turbulence_influence_max = 0.02
 turbulence_initial_displacement_min = -3.1
 turbulence_initial_displacement_max = 100.0
+sub_emitter_mode = 3
+sub_emitter_amount_at_collision = 1
+collision_mode = 1
+collision_friction = 0.0
+collision_bounce = 0.0
 
 [sub_resource type="Curve" id="Curve_56kkx"]
 _data = [Vector2(0, 0), 0.0, 33.6, 0, 0, Vector2(0.110526, 1), 0.0, 0.0, 0, 0, Vector2(0.989474, 0.0526316), -1.35714, 0.0, 0, 0]
@@ -84,6 +102,27 @@ shape = 0
 size = 0.4
 sections = 4
 curve = SubResource("Curve_56kkx")
+
+[sub_resource type="Curve" id="Curve_7nu2v"]
+_data = [Vector2(0, 0), 0.0, 1.4, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_gnpae"]
+curve = SubResource("Curve_7nu2v")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_g71n8"]
+gravity = Vector3(0, 0, 0)
+scale_min = 0.1
+scale_max = 0.1
+scale_curve = SubResource("CurveTexture_gnpae")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_s2vc2"]
+transparency = 1
+albedo_color = Color(1, 1, 1, 0.054902)
+albedo_texture = ExtResource("2_gmtk5")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_wjt4k"]
+material = SubResource("StandardMaterial3D_s2vc2")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_7emgr"]
 shader = ExtResource("4_duy1h")
@@ -184,29 +223,40 @@ texture_filter = 0
 
 [node name="main" type="Node2D"]
 
-[node name="camera" type="Camera3D" parent="."]
-
-[node name="sakura_burst" type="GPUParticles3D" parent="camera"]
+[node name="sakura_burst" type="GPUParticles3D" parent="."]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 6, -5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0.72144, 0)
 cast_shadow = 0
 emitting = false
-amount = 128
-lifetime = 6.0
+amount = 64
+lifetime = 20.0
 explosiveness = 1.0
 process_material = SubResource("ParticleProcessMaterial_o61i5")
 draw_pass_1 = SubResource("QuadMesh_8eamb")
 
-[node name="rain" type="GPUParticles3D" parent="camera"]
+[node name="rain" type="GPUParticles3D" parent="."]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.80301, -6)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 cast_shadow = 0
 emitting = false
-amount = 50
+amount = 24
+sub_emitter = NodePath("rain_splash")
+collision_base_size = 0.04
 trail_enabled = true
 trail_lifetime = 0.2
 process_material = SubResource("ParticleProcessMaterial_6d1hp")
 draw_pass_1 = SubResource("RibbonTrailMesh_yqmjl")
+
+[node name="rain_splash" type="GPUParticles3D" parent="rain"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.855676, 0)
+emitting = false
+lifetime = 0.5
+interpolate = false
+process_material = SubResource("ParticleProcessMaterial_g71n8")
+draw_pass_1 = SubResource("PlaneMesh_wjt4k")
+
+[node name="camera" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0.788339, 0)
 
 [node name="audio_players" type="Node3D" parent="camera"]
 
@@ -1019,13 +1069,16 @@ fixed_fps = 60
 script = ExtResource("8_mrnfb")
 
 [node name="table" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, -0.487522)
+transform = Transform3D(1, 0, 0, 0, 1, -1.06581e-14, 0, 1.06581e-14, 1, 0, 0, 0)
 material_override = SubResource("StandardMaterial3D_akww2")
 size = Vector3(1, 0.2, 1)
 
 [node name="OmniLight3D" type="OmniLight3D" parent="table"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -4.37114e-08)
 visible = false
+
+[node name="GPUParticlesCollisionBox3D" type="GPUParticlesCollisionBox3D" parent="table"]
+size = Vector3(1, 0.2, 1)
 
 [connection signal="pressed" from="game_manager/CanvasLayer/Control/koikoi_selection/h_container/koikoi_btn" to="game_manager" method="_on_koikoi_pressed"]
 [connection signal="pressed" from="game_manager/CanvasLayer/Control/koikoi_selection/h_container/finish_btn" to="game_manager" method="_on_finish_pressed"]
