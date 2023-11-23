@@ -190,7 +190,11 @@ func shuffle_deck():
 func start_round():
 	create_deck()
 	shuffle_deck()
-	
+#	deck.append({"suite" : 0, "number" : 0})
+#	await add_card({"suite" : 0, "number" : 1}, player_hand)
+#	await add_card({"suite" : 0, "number" : 2}, player_hand)
+#	update_table()
+#	return
 	# Fake table
 #	await add_card({"suite" : 4, "number" : 0}, enemy_hand)
 #	await add_card({"suite" : 2, "number" : 0}, field) # Sakura
@@ -661,6 +665,7 @@ func prepare_multiple_matches(card):
 		await get_tree().process_frame
 
 func move_card(card_object, new_parent):
+	print("Moving " + card_to_string(card_object) + " to " + str(new_parent))
 	var old_parent = card_object.get_parent()
 	var old_pos = card_object.global_position
 	
@@ -681,6 +686,12 @@ func move_card(card_object, new_parent):
 	
 	control.remove_child(card_object)
 	new_parent.add_child(card_object)
+	
+	# For some reason if we don't wait a frame, 
+	# the card position is not updated in time and it causes an issue 
+	# when match_card is being called in from_deck_to_field where the new card
+	# moves to the previous card's position in the hand instead of field
+	await get_tree().process_frame
 	
 
 func from_deck_to_field():
