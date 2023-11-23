@@ -1098,11 +1098,12 @@ texture = ExtResource("6_36fg4")
 
 [node name="SpotLight3D" type="SpotLight3D" parent="table"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 1, -1.06581e-14)
+light_energy = 2.0
 spot_angle = 30.0
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.258819, 0.965926, 0, -0.965926, 0.258819, 0, 0.627351, 1.05917)
-editor_only = true
+visible = false
 
 [connection signal="pressed" from="game_manager/CanvasLayer/Control/koikoi_selection/h_container/koikoi_btn" to="game_manager" method="_on_koikoi_pressed"]
 [connection signal="pressed" from="game_manager/CanvasLayer/Control/koikoi_selection/h_container/finish_btn" to="game_manager" method="_on_finish_pressed"]
