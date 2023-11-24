@@ -126,6 +126,9 @@ albedo_texture = ExtResource("2_gmtk5")
 [sub_resource type="PlaneMesh" id="PlaneMesh_wjt4k"]
 material = SubResource("StandardMaterial3D_s2vc2")
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bgnef"]
+shader = ExtResource("7_71hxd")
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_7emgr"]
 shader = ExtResource("4_duy1h")
 shader_parameter/speed_1 = 0.05
@@ -1008,9 +1011,6 @@ shader = ExtResource("4_duy1h")
 shader_parameter/speed_1 = 0.05
 shader_parameter/speed_2 = 0.025
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_bgnef"]
-shader = ExtResource("7_71hxd")
-
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2nxq8"]
 
 [sub_resource type="Gradient" id="Gradient_vyh8j"]
@@ -1153,6 +1153,21 @@ pivot_offset = Vector2(256, 256)
 texture = ExtResource("4_gh55e")
 stretch_mode = 4
 
+[node name="deck" type="TextureRect" parent="game_manager/CanvasLayer/Control"]
+unique_name_in_owner = true
+material = SubResource("ShaderMaterial_bgnef")
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 126.0
+offset_top = -96.0
+offset_right = 244.0
+offset_bottom = 96.0
+grow_vertical = 2
+scale = Vector2(0.8, 0.8)
+texture = ExtResource("6_36fg4")
+
 [node name="screen_fx" type="Control" parent="game_manager/CanvasLayer/Control"]
 layout_mode = 1
 anchors_preset = 15
@@ -1287,21 +1302,6 @@ offset_right = 313.0
 offset_bottom = 626.0
 grow_horizontal = 2
 texture = ExtResource("3_br8kj")
-
-[node name="deck" type="TextureRect" parent="game_manager/CanvasLayer/Control"]
-unique_name_in_owner = true
-material = SubResource("ShaderMaterial_bgnef")
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_left = 126.0
-offset_top = -96.0
-offset_right = 244.0
-offset_bottom = 96.0
-grow_vertical = 2
-scale = Vector2(0.8, 0.8)
-texture = ExtResource("6_36fg4")
 
 [node name="enemy_hand" type="HBoxContainer" parent="game_manager/CanvasLayer/Control"]
 unique_name_in_owner = true

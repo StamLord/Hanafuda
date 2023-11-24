@@ -212,11 +212,7 @@ func shuffle_deck():
 func start_round():
 	create_deck()
 	shuffle_deck()
-#	deck.append({"suite" : 0, "number" : 0})
-#	await add_card({"suite" : 0, "number" : 1}, player_hand)
-#	await add_card({"suite" : 0, "number" : 2}, player_hand)
-#	update_table()
-#	return
+	
 	# Fake table
 #	await add_card({"suite" : 4, "number" : 0}, enemy_hand)
 #	await add_card({"suite" : 2, "number" : 0}, field) # Sakura
