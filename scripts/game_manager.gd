@@ -91,6 +91,7 @@ const sakura_viewing_sake = {
 # Configurable
 @export var animation_speed = 0.2
 @export var turn_glow_speed = 0.2
+@export var yaku_glow_duration = 4
 
 @export var yaku_color_schemes = {
 	"Default" : {"color" : "ffffff", "outline_color" : "000000"},
@@ -111,6 +112,10 @@ var card_visual_path = preload("res://scenes/card_visual.tscn")
 @onready var sakura_glow = %sakura_glow
 @onready var moon_glow = %moon_glow
 @onready var moon_sprite = %moon_sprite
+@onready var three_brights_glow = %three_brights_glow
+@onready var rainy_four_brights_glow = %rainy_four_brights_glow
+@onready var four_brights_glow = %four_brights_glow
+@onready var five_brights_glow = %five_brights_glow
 
 @onready var sakura_particles = %sakura_burst
 @onready var rain_particles = %rain
@@ -217,9 +222,15 @@ func start_round():
 #	await add_card({"suite" : 2, "number" : 0}, field) # Sakura
 #	await add_card({"suite" : 7, "number" : 0}, field) # Moon
 #	await add_card({"suite" : 8, "number" : 0}, field) # Sake
+#	await add_card({"suite" : 0, "number" : 0}, field) # Sun
+#	await add_card({"suite" : 10, "number" : 0}, field) # Rainy
+#	await add_card({"suite" : 11, "number" : 0}, field) # Phoenix
 #	await add_card({"suite" : 2, "number" : 1}, player_hand) # Sakura match
 #	await add_card({"suite" : 8, "number" : 1}, player_hand) # Sake match
 #	await add_card({"suite" : 7, "number" : 1}, player_hand) # Moon match
+#	await add_card({"suite" : 0, "number" : 1}, player_hand) # Sun match
+#	await add_card({"suite" : 10, "number" : 1}, player_hand) # Rainy Match
+#	await add_card({"suite" : 11, "number" : 1}, player_hand) # Phoenix Match
 #	update_table()
 #	return
 	
@@ -316,10 +327,7 @@ func end_round_draw():
 
 func end_round():
 	# Stop turn glow
-	if current_player == 0:
-		animate_glow(player_glow, Vector2(1,1), Vector2(1,0))
-	else:
-		animate_glow(enemy_glow, Vector2(1,1), Vector2(1,0))
+	stop_turn_glow()
 	
 	round += 1
 	
@@ -351,10 +359,7 @@ func end_round():
 
 func end_game():
 	# Stop turn glow
-	if current_player == 0:
-		animate_glow(player_glow, Vector2(1,1), Vector2(1,0))
-	else:
-		animate_glow(enemy_glow, Vector2(1,1), Vector2(1,0))
+	stop_turn_glow()
 	
 	var winner = -1 # Draw
 	win_text.text = "DRAW"
@@ -382,11 +387,17 @@ func update_glow():
 		player_glow.visible = false
 	
 
+func stop_turn_glow():
+	if current_player == 0 and player_glow.scale.y > 0:
+		animate_glow(player_glow, Vector2(1,1), Vector2(1,0))
+	elif enemy_glow.scale.y > 0:
+		animate_glow(enemy_glow, Vector2(1,1), Vector2(1,0))
+	
 func show_sakura_glow():
 	sakura_particles.emitting = true
-	await animate_glow(sakura_glow, Vector2(10,10), Vector2(1,1))
-	await get_tree().create_timer(3).timeout
-	await animate_glow(sakura_glow, Vector2(1,1), Vector2(10,10))
+	await animate_glow(sakura_glow, Vector2(2,2), Vector2(1,1), 1.0)
+	await get_tree().create_timer(yaku_glow_duration - 2).timeout
+	await animate_glow(sakura_glow, Vector2(1,1), Vector2(2,2), 1.0)
 	sakura_particles.emitting = false
 	sakura_glow.visible = false
 	
@@ -396,19 +407,50 @@ func show_moon_glow():
 	await animate_image(moon_sprite, moon_sprite.global_position - Vector2(0, 600), moon_sprite.global_position)
 	
 	# Wait
-	await get_tree().create_timer(2).timeout
+	await get_tree().create_timer(3).timeout
 	
 	# Move out
 	await animate_image(moon_sprite, moon_sprite.global_position, moon_sprite.global_position - Vector2(0, 600))
 	await animate_glow(moon_glow, Vector2(1,1), Vector2(1,0))
+	
 	moon_glow.visible = false
 	moon_sprite.visible = false
 	
+	# Reset position
+	moon_sprite.global_position += Vector2(0, 600)
 
 func show_rain():
 	rain_particles.emitting = true
 	await get_tree().create_timer(3).timeout
 	rain_particles.emitting = false
+	
+
+func show_three_brights_glow():
+	await animate_glow(three_brights_glow, Vector2(1,0), Vector2(1,1))
+	await get_tree().create_timer(yaku_glow_duration).timeout
+	await animate_glow(three_brights_glow, Vector2(1,1), Vector2(1,0))
+	three_brights_glow.visible = false
+	
+
+func show_rainy_four_brights_glow():
+	await animate_glow(rainy_four_brights_glow, Vector2(1,0), Vector2(1,1))
+	await get_tree().create_timer(yaku_glow_duration).timeout
+	await animate_glow(rainy_four_brights_glow, Vector2(1,1), Vector2(1,0))
+	rainy_four_brights_glow.visible = false
+	
+
+func show_four_brights_glow():
+	await animate_glow(four_brights_glow, Vector2(2,2), Vector2(1,1), 1.0)
+	await get_tree().create_timer(yaku_glow_duration - 2).timeout
+	await animate_glow(four_brights_glow, Vector2(1,1), Vector2(2,2), 1.0)
+	four_brights_glow.visible = false
+	
+
+func show_five_brights_glow():
+	await animate_glow(five_brights_glow, Vector2(4,4), Vector2(1,1), 1.0)
+	await get_tree().create_timer(yaku_glow_duration - 2).timeout
+	await animate_glow(five_brights_glow, Vector2(1,1), Vector2(4,4), 1.0)
+	five_brights_glow.visible = false
 	
 
 func show_summary(yaku):
@@ -495,9 +537,9 @@ func show_koikoi_popup(is_koikoi):
 	popup.visible = false
 	
 
-func animate_glow(glow, from_scale, to_scale):
+func animate_glow(glow, from_scale, to_scale, duration = turn_glow_speed):
 	glow.visible = true
-	var duration = turn_glow_speed * 1000
+	duration *= 1000
 	var start_time = Time.get_ticks_msec()
 	
 	while Time.get_ticks_msec() - start_time < duration:
@@ -766,12 +808,23 @@ func animate_card(card, from, to, from_scale, to_scale):
 	
 
 func animate_yaku(name, points):
+	# Stop turn glow
+	stop_turn_glow()
+	
+	# Animate yaku
 	if name == "Sakura Viewing Sake":
 		show_sakura_glow()
 	elif name == "Moon Viewing Sake":
 		show_moon_glow()
+	elif name == "Three Bright":
+		show_three_brights_glow()
 	elif name == "Rainy Four Bright":
 		show_rain()
+		show_rainy_four_brights_glow()
+	elif name == "Four Bright":
+		show_four_brights_glow()
+	elif name == "Five Bright":
+		show_five_brights_glow()
 		
 	yaku_name.text = str(name)
 	yaku_points.text = "+" + str(points) + " points"
@@ -792,7 +845,7 @@ func animate_yaku(name, points):
 	
 	yaku_popup.visible = true
 	
-	await get_tree().create_timer(3).timeout
+	await get_tree().create_timer(yaku_glow_duration).timeout
 	yaku_popup.visible = false
 	
 
