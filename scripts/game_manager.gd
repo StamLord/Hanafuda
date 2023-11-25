@@ -88,6 +88,16 @@ const sakura_viewing_sake = {
 	"points" : 5
 }
 
+const four_of_a_kind = {
+	"name" : "Four of a Kind",
+	"points" : 6
+}
+
+const four_pairs = {
+	"name" : "Four Pairs",
+	"points" : 6
+}
+
 # Configurable
 @export var animation_speed = 0.2
 @export var turn_glow_speed = 0.2
@@ -227,21 +237,114 @@ func start_round():
 #	await add_card({"suite" : 0, "number" : 1}, player_hand) # Sun match
 #	await add_card({"suite" : 10, "number" : 1}, player_hand) # Rainy Match
 #	await add_card({"suite" : 11, "number" : 1}, player_hand) # Phoenix Match
+	
+	# Four of a Kind (Player)
+#	await add_card({"suite" : 10, "number" : 0}, player_hand)
+#	await add_card({"suite" : 10, "number" : 1}, player_hand) 
+#	await add_card({"suite" : 10, "number" : 2}, player_hand)
+#	await add_card({"suite" : 10, "number" : 3}, player_hand)
+
+	# Four of a Kind (Enemy)
+#	await add_card({"suite" : 10, "number" : 0}, enemy_hand)
+#	await add_card({"suite" : 10, "number" : 1}, enemy_hand) 
+#	await add_card({"suite" : 10, "number" : 2}, enemy_hand)
+#	await add_card({"suite" : 10, "number" : 3}, enemy_hand)
+	
+	# Four of a Kind (Field)
+#	await add_card({"suite" : 10, "number" : 0}, field)
+#	await add_card({"suite" : 10, "number" : 1}, field) 
+#	await add_card({"suite" : 10, "number" : 2}, field)
+#	await add_card({"suite" : 10, "number" : 3}, field)
+
+	# Four Pairs (Player)
+#	await add_card({"suite" : 10, "number" : 0}, player_hand)
+#	await add_card({"suite" : 10, "number" : 1}, player_hand)
+#	await add_card({"suite" : 0, "number" : 0}, player_hand)
+#	await add_card({"suite" : 0, "number" : 1}, player_hand)
+#	await add_card({"suite" : 1, "number" : 0}, player_hand)
+#	await add_card({"suite" : 1, "number" : 1}, player_hand)
+#	await add_card({"suite" : 3, "number" : 0}, player_hand)
+#	await add_card({"suite" : 3, "number" : 1}, player_hand)
+	
+	# Four Pairs (Enemy)
+#	await add_card({"suite" : 10, "number" : 0}, enemy_hand)
+#	await add_card({"suite" : 10, "number" : 1}, enemy_hand)
+#	await add_card({"suite" : 0, "number" : 0}, enemy_hand)
+#	await add_card({"suite" : 0, "number" : 1}, enemy_hand)
+#	await add_card({"suite" : 1, "number" : 0}, enemy_hand)
+#	await add_card({"suite" : 1, "number" : 1}, enemy_hand)
+#	await add_card({"suite" : 3, "number" : 0}, enemy_hand)
+#	await add_card({"suite" : 3, "number" : 1}, enemy_hand)
+	
 #	update_table()
 #	return
 	
 	for i in range(4):
 		await add_card(draw_card(), enemy_hand, show_enemy_hand)
 		await add_card(draw_card(), enemy_hand, show_enemy_hand)
-		
+
 		await add_card(draw_card(), field)
 		await add_card(draw_card(), field)
-		
+
 		await add_card(draw_card(), player_hand)
 		await add_card(draw_card(), player_hand)
 	
 	update_table()
 	
+	# Check if for lucky hands which result in auto win or a re-deal
+	
+	var player_lucky = evaluate_lucky_hand(player_hand)
+	var enemy_lucky = evaluate_lucky_hand(enemy_hand)
+	var field_lucky = evaluate_lucky_hand(field)
+	
+	# We only animate the first result if multiple ( Should be "Four of a Kind" )
+	# Both players are lucky - Draw
+	if player_lucky.size() > 0 and enemy_lucky.size() > 0:
+		var cards = player_lucky[player_lucky.keys()[0]]
+		var cards2 = enemy_lucky[enemy_lucky.keys()[0]]
+		
+		animate_cards_raise(cards, Vector2(0, -50))
+		animate_cards_raise(cards2, Vector2(0, 50))
+		
+		end_round_draw()
+		return
+	# Player wins
+	elif player_lucky.size() > 0:
+		# Raise cards relevant to yaku
+		var cards = player_lucky[player_lucky.keys()[0]]
+		animate_cards_raise(cards, Vector2(0, -50))
+		
+		# Animate yaku
+		var yaku = player_lucky.keys()[0]
+		await animate_yaku(yaku["name"], yaku["points"])
+		player_points += yaku["points"]
+		update_points(player_points_label, player_points)
+		end_round()
+		return
+	# Enemy wins
+	elif enemy_lucky.size() > 0:
+		# Raise cards relevant to yaku
+		var cards = enemy_lucky[enemy_lucky.keys()[0]]
+		animate_cards_raise(cards, Vector2(0, 50))
+		
+		# Animate yaku
+		var yaku = enemy_lucky.keys()[0]
+		await animate_yaku(yaku["name"], yaku["points"])
+		enemy_points += yaku["points"]
+		update_points(enemy_points_label, enemy_points)
+		end_round()
+		return
+	# Field got one of the lucky hands - Draw
+	elif field_lucky.size() > 0:
+		# Raise cards relevant to yaku
+		var cards = field_lucky[field_lucky.keys()[0]]
+		animate_cards_raise(cards, Vector2(0, -50))
+		
+		# Animate yaku
+		await animate_yaku("Re-Deal", 0)
+		end_round_draw()
+		return
+		
 	if current_player == 1:
 		cpu_turn()
 	
@@ -372,6 +475,40 @@ func end_game():
 	
 	# Next round starts with winner
 	current_player = winner
+	
+
+func sort_suites(hand):
+	var suites = {}
+	for card in hand.get_children():
+		if not suites.has(card.suite):
+			suites[card.suite] = []
+		suites[card.suite].append(card)
+		
+	return suites
+	
+
+func evaluate_lucky_hand(hand):
+	# Pairs of yaku(dict) : [card, card, card..]
+	var result = {}
+	
+	# Sort cards into dictionary of {suite: [card, card2, ..]}
+	var suites = sort_suites(hand)
+	
+	# Check for 4 of cards of the same suite
+	# and check for 4 pairs of same suite
+	var pairs = 0
+	var pair_cards = []
+	for key in suites.keys():
+		if suites[key].size() >= 2:
+			pairs += 1
+			pair_cards.append_array(suites[key])
+		if suites[key].size() >= 4:
+			result[four_of_a_kind] = suites[key]
+	
+	if pairs >= 4:
+		result[four_pairs] = pair_cards
+	
+	return result
 	
 
 func update_glow():
@@ -801,6 +938,17 @@ func animate_card(card, from, to, from_scale, to_scale):
 		
 	card.global_position = to
 	card.scale = to_scale
+	
+
+func animate_card_raise(card, offset):
+	var from = card.global_position
+	var to = from + offset
+	await animate_card(card, from, to, card.scale, card.scale)
+	
+
+func animate_cards_raise(cards, offset):
+	for i in range(cards.size()):
+		animate_card_raise(cards[i], offset)
 	
 
 func animate_yaku(name, points):
